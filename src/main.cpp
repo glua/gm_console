@@ -22,5 +22,10 @@ GMOD_MODULE_OPEN() {
 		return 0;
 	}
 
+	LUA->PushSpecial(Lua::SPECIAL_GLOB);
+	LUA->PushString("ClearConsole");
+	LUA->PushCFunction(ClearConsole);
+	LUA->SetTable(-3);
+
 	return 0;
 }

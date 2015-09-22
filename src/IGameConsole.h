@@ -1,8 +1,4 @@
-//========= Copyright © 1996-2002, Valve LLC, All rights reserved. ============
-//
-// Purpose:
-//
-//=============================================================================
+// Mostly obtained from https://developer.valvesoftware.com/wiki/IGameConsole
 
 #ifndef IGAMECONSOLE_H
 #define IGAMECONSOLE_H
@@ -43,11 +39,11 @@ public:
 	virtual void	DPrintf(const char *format, ...) = 0;
 
 	// printes a debug message to the console
-	virtual void	ColorPrintf( Color& clr, const char *format, ...) = 0;
+	virtual void	ColorPrintf(Color& clr, const char *format, ...) = 0;
 
-	virtual void	SetParent( VPANEL parent ) = 0;
+	virtual void	SetParent(VPANEL parent) = 0;
 };
 
-#define GAMECONSOLE_INTERFACE_VERSION "GameConsole003"
+#define GAMECONSOLE_INTERFACE_VERSION "GameConsole004" // gmod uses 004; default is 003
 
 #endif // IGAMECONSOLE_H
