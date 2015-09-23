@@ -1,10 +1,10 @@
 #include "GarrysMod/Lua/Interface.h"
 
 #include "interface.h"
-#include <vgui/VGUI.h>
+#include "vgui/VGUI.h"
 
 #include "vgui/IVGui.h"
-#include "vgui_controls/panel.h"
+#include "vgui_controls/Panel.h"
 
 #include "IGameConsole.h"
 
