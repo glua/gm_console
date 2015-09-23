@@ -8,7 +8,7 @@
 #endif
 
 #include "interface.h"
-#include <vgui\VGUI.h>
+#include "vgui/VGUI.h"
 
 class Color;
 using namespace vgui;
