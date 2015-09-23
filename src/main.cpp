@@ -1,13 +1,54 @@
 #include "GarrysMod/Lua/Interface.h"
 
+#include "interface.h"
+#include <vgui/VGUI.h>
+
+#include "vgui/IVGui.h"
+#include "vgui_controls/panel.h"
+
 #include "IGameConsole.h"
 
 IGameConsole *g_GameConsole = NULL;
 
 using namespace GarrysMod;
 
-int ClearConsole(lua_State *state) {
+int console_Activate(lua_State *state) {
+	g_GameConsole->Activate();
+
+	return 0;
+}
+
+int console_Initialize(lua_State *state) {
+	g_GameConsole->Initialize();
+
+	return 0;
+}
+
+int console_Hide(lua_State *state) {
+	g_GameConsole->Hide();
+
+	return 0;
+}
+
+int console_Clear(lua_State *state) {
 	g_GameConsole->Clear();
+
+	return 0;
+}
+
+int console_IsConsoleVisible(lua_State *state) {
+	LUA->PushBool(g_GameConsole->IsConsoleVisible());
+
+	return 1;
+}
+
+int console_SetParent(lua_State *state) {
+	LUA->CheckType(1, Lua::Type::PANEL);
+
+	vgui::Panel *pPanel = *(vgui::Panel **)LUA->GetUserdata(1);
+	vgui::VPANEL pVPanel = pPanel->GetVPanel();
+
+	g_GameConsole->SetParent(pVPanel);
 
 	return 0;
 }
@@ -23,9 +64,26 @@ GMOD_MODULE_OPEN() {
 	}
 
 	LUA->PushSpecial(Lua::SPECIAL_GLOB);
-	LUA->PushString("ClearConsole");
-	LUA->PushCFunction(ClearConsole);
-	LUA->SetTable(-3);
+		LUA->CreateTable();
+			LUA->PushCFunction(console_Activate);
+			LUA->SetField(-2, "Activate");
+
+			LUA->PushCFunction(console_Initialize);
+			LUA->SetField(-2, "Initialize");
+
+			LUA->PushCFunction(console_Hide);
+			LUA->SetField(-2, "Hide");
+
+			LUA->PushCFunction(console_Clear);
+			LUA->SetField(-2, "Clear");
+
+			LUA->PushCFunction(console_IsConsoleVisible);
+			LUA->SetField(-2, "IsConsoleVisible");
+
+			// LUA->PushCFunction(console_SetParent); Broken
+			// LUA->SetField(-2, "SetParent");
+		LUA->SetField(-2, "console");
+	LUA->Pop();
 
 	return 0;
 }
