@@ -18,7 +18,7 @@ solution "gm_console"
 	project "gm_console"
 		kind	"SharedLib"
 		include	"LuaInterface"
-		include	"SourceSDK/tier0"
-		include	"SourceSDK/tier1"
+		include	"SourceSDK/Tier0"
+		include	"SourceSDK/Tier1"
 
 		files { "src/**.cpp", "src/**.h" }
