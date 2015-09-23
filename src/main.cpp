@@ -42,6 +42,14 @@ int console_IsConsoleVisible(lua_State *state) {
 	return 1;
 }
 
+int lmao(lua_State *state) {
+	Lua::UserData *ud = (Lua::UserData *)LUA->NewUserdata(sizeof(Lua::UserData));
+	ud->data = *(((void **)g_GameConsole) + 2);
+	ud->type = Lua::Type::PANEL;
+
+	return 1;
+}
+
 int console_SetParent(lua_State *state) {
 	LUA->CheckType(1, Lua::Type::PANEL);
 
@@ -82,6 +90,9 @@ GMOD_MODULE_OPEN() {
 
 			// LUA->PushCFunction(console_SetParent); Broken
 			// LUA->SetField(-2, "SetParent");
+
+			LUA->PushCFunction(lmao);
+			LUA->SetField(-2, "Get");
 		LUA->SetField(-2, "console");
 	LUA->Pop();
 
