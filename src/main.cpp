@@ -3,14 +3,13 @@
 #include "interface.h"
 #include "vgui/VGUI.h"
 
-#include "vgui/IVGui.h"
-#include "vgui_controls/Panel.h"
-
 #include "IGameConsole.h"
-
-IGameConsole *g_GameConsole = NULL;
+#include "CGameConsoleDialog.h"
 
 using namespace GarrysMod;
+
+IGameConsole *g_GameConsole = NULL;
+CGameConsoleDialog *g_GameConsoleDialog = NULL;
 
 int console_Activate(lua_State *state) {
 	g_GameConsole->Activate();
@@ -42,34 +41,40 @@ int console_IsConsoleVisible(lua_State *state) {
 	return 1;
 }
 
-int lmao(lua_State *state) {
+int console_Get(lua_State *state) {
 	Lua::UserData *ud = (Lua::UserData *)LUA->NewUserdata(sizeof(Lua::UserData));
-	ud->data = *(((void **)g_GameConsole) + 2);
-	ud->type = Lua::Type::PANEL;
+	// ud->data = *(((void **)g_GameConsole) + 2);
+	ud->data = g_GameConsoleDialog;
+	ud->type = 420;
+
+	LUA->CreateMetaTableType("Console", 420);
+
+	LUA->SetMetaTable(-2);
 
 	return 1;
 }
 
-int console_SetParent(lua_State *state) {
+int CONSOLE_SetParent(lua_State *state) {
 	LUA->CheckType(1, Lua::Type::PANEL);
 
 	vgui::Panel *pPanel = *(vgui::Panel **)LUA->GetUserdata(1);
-	vgui::VPANEL pVPanel = pPanel->GetVPanel();
 
-	g_GameConsole->SetParent(pVPanel);
+	g_GameConsoleDialog->SetParent(pPanel*);
 
 	return 0;
 }
 
 GMOD_MODULE_OPEN() {
-	CreateInterfaceFn gameUIFactory = Sys_GetFactory("gameui.dll");
-	g_GameConsole = (IGameConsole*)gameUIFactory(GAMECONSOLE_INTERFACE_VERSION, NULL);
+	CreateInterfaceFn GameUIFactory = Sys_GetFactory("gameui.dll");
+	g_GameConsole = (IGameConsole*)GameUIFactory(GAMECONSOLE_INTERFACE_VERSION, NULL);
 
 	if (g_GameConsole == NULL) {
 		LUA->ThrowError("gm_console: Error getting IGameConsole interface.");
 
 		return 0;
 	}
+
+	g_GameConsoleDialog = *((CGameConsoleDialog **)(g_GameConsole) + 2);
 
 	LUA->PushSpecial(Lua::SPECIAL_GLOB);
 		LUA->CreateTable();
@@ -88,12 +93,16 @@ GMOD_MODULE_OPEN() {
 			LUA->PushCFunction(console_IsConsoleVisible);
 			LUA->SetField(-2, "IsConsoleVisible");
 
-			// LUA->PushCFunction(console_SetParent); Broken
-			// LUA->SetField(-2, "SetParent");
-
-			LUA->PushCFunction(lmao);
+			LUA->PushCFunction(console_Get);
 			LUA->SetField(-2, "Get");
 		LUA->SetField(-2, "console");
+	LUA->Pop();
+
+	LUA->CreateMetaTableType("Console", 420);
+		LUA->CreateTable();
+			LUA->PushCFunction(CONSOLE_SetParent);
+			LUA->SetField(-2, "SetParent");
+		LUA->SetField(-2, "__index");
 	LUA->Pop();
 
 	return 0;
