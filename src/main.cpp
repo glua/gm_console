@@ -1,3 +1,9 @@
+#ifdef _LINUX
+	#define GAMEUI_LIB "GameUI.so"
+#else
+	#define GAMEUI_LIB "GameUI.dll"
+#endif
+
 #include "GarrysMod/Lua/Interface.h"
 
 #include "interface.h"
@@ -65,7 +71,7 @@ int CONSOLE_SetParent(lua_State *state) {
 }
 
 GMOD_MODULE_OPEN() {
-	CreateInterfaceFn GameUIFactory = Sys_GetFactory("gameui.dll");
+	CreateInterfaceFn GameUIFactory = Sys_GetFactory(GAMEUI_LIB);
 	g_GameConsole = (IGameConsole*)GameUIFactory(GAMECONSOLE_INTERFACE_VERSION, NULL);
 
 	if (g_GameConsole == NULL) {
