@@ -143,7 +143,7 @@ public:													//  Index Offset
 	void PaintBorder();								// 0129  0204
 	void PaintBuildOverlay();								// 0130  0208
 	void PostChildPaint();								// 0131  020C
-	vgui::CConsoleDialog::PerformLayout();								// 0132  0210
+	void PerformLayout();								// 0132  0210
 	vgui::PanelMap_t GetPanelMap();								// 0133  0214
 	void SetProportional(bool state);								// 0134  0218
 	void SetMouseInputEnabled(bool state);								// 0135  021C
@@ -204,7 +204,7 @@ public:													//  Index Offset
 	void GetDragData(CUtlVector< KeyValues * >& list);								// 0190  02F8
 	void CreateDragData();								// 0191  02FC
 	void OnRequestFocus(vgui::VPANEL subFocus, vgui::VPANEL defaultPanel);								// 0192  0300
-	vgui::CConsoleDialog::OnScreenSizeChanged(int,int);								// 0193  0304
+	void OnScreenSizeChanged(int iOldWide, int iOldTall);								// 0193  0304
 	void InternalCursorMoved(int xpos, int ypos);								// 0194  0308
 	void InternalCursorEntered();								// 0195  030C
 	void InternalCursorExited();								// 0196  0310
@@ -248,9 +248,9 @@ public:													//  Index Offset
 	void OnClose();								// 0234  03A8
 	void SetTitle(const char *title, bool surfaceTitle);								// 0235  03AC
 	void SetTitle(const wchar_t *title, bool surfaceTitle);								// 0236  03B0
-	vgui::CConsoleDialog::Activate();								// 0237  03B4
+	void Activate();								// 0237  03B4
 	void ActivateMinimized();								// 0238  03B8
-	vgui::CConsoleDialog::Close();								// 0239  03BC
+	void Close();								// 0239  03BC
 	void CloseModal();								// 0240  03C0
 	void SetDeleteSelfOnClose(bool state);								// 0241  03C4
 	void MoveToCenterOfScreen();								// 0242  03C8
