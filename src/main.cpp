@@ -49,9 +49,8 @@ int console_IsConsoleVisible(lua_State *state) {
 
 int console_Get(lua_State *state) {
 	Lua::UserData *ud = (Lua::UserData *)LUA->NewUserdata(sizeof(Lua::UserData));
-	// ud->data = *(((void **)g_GameConsole) + 2);
 	ud->data = g_GameConsoleDialog;
-	ud->type = 420;
+	ud->type = Lua::Type::PANEL; // 420
 
 	LUA->CreateMetaTableType("Console", 420);
 
@@ -60,14 +59,44 @@ int console_Get(lua_State *state) {
 	return 1;
 }
 
+int CONSOLE_tostring(lua_State *state) {
+	LUA->PushString("Console instance");
+
+	return 1;
+}
+
 int CONSOLE_SetParent(lua_State *state) {
-	LUA->CheckType(1, Lua::Type::PANEL);
+	LUA->CheckType(2, Lua::Type::PANEL);
 
-	vgui::Panel *pPanel = *(vgui::Panel **)LUA->GetUserdata(1);
+	vgui::Panel *pPanel = (vgui::Panel *)((GarrysMod::Lua::UserData *)LUA->GetUserdata(2))->data;
 
-	g_GameConsoleDialog->SetParent(pPanel*);
+	g_GameConsoleDialog->SetParent(pPanel);
 
 	return 0;
+}
+
+int CONSOLE_GetParent(lua_State *state) {
+	vgui::Panel *pPanel = g_GameConsoleDialog->GetParent();
+
+	Lua::UserData *ud = (Lua::UserData *)LUA->NewUserdata(sizeof(Lua::UserData));
+	ud->data = pPanel;
+	ud->type = Lua::Type::PANEL;
+
+	return 1;
+}
+
+int CONSOLE_SetVisible(lua_State *state) {
+	LUA->CheckType(2, Lua::Type::BOOL);
+
+	g_GameConsoleDialog->SetVisible(LUA->GetBool());
+
+	return 0;
+}
+
+int CONSOLE_IsVisible(lua_State *state) {
+	LUA->PushBool(g_GameConsoleDialog->IsVisible());
+
+	return 1;
 }
 
 GMOD_MODULE_OPEN() {
@@ -106,10 +135,26 @@ GMOD_MODULE_OPEN() {
 
 	LUA->CreateMetaTableType("Console", 420);
 		LUA->CreateTable();
+			LUA->PushString("Console");
+			LUA->SetField(-2, "__type");
+
+			LUA->PushCFunction(CONSOLE_tostring);
+			LUA->SetField(-2, "__tostring");
+
 			LUA->PushCFunction(CONSOLE_SetParent);
 			LUA->SetField(-2, "SetParent");
+
+			LUA->PushCFunction(CONSOLE_SetVisible);
+			LUA->SetField(-2, "SetVisible");
+
+			LUA->PushCFunction(CONSOLE_IsVisible);
+			LUA->SetField(-2, "IsVisible");
 		LUA->SetField(-2, "__index");
 	LUA->Pop();
 
+	return 0;
+}
+
+GMOD_MODULE_CLOSE() {
 	return 0;
 }
