@@ -53,7 +53,6 @@ int console_Get(lua_State *state) {
 	ud->type = Lua::Type::PANEL; // 420
 
 	LUA->CreateMetaTableType("Console", 420);
-
 	LUA->SetMetaTable(-2);
 
 	return 1;
@@ -81,6 +80,9 @@ int CONSOLE_GetParent(lua_State *state) {
 	Lua::UserData *ud = (Lua::UserData *)LUA->NewUserdata(sizeof(Lua::UserData));
 	ud->data = pPanel;
 	ud->type = Lua::Type::PANEL;
+
+	LUA->CreateMetaTableType("Panel", Lua::Type::PANEL);
+	LUA->SetMetaTable(-2);
 
 	return 1;
 }
@@ -143,6 +145,9 @@ GMOD_MODULE_OPEN() {
 
 			LUA->PushCFunction(CONSOLE_SetParent);
 			LUA->SetField(-2, "SetParent");
+
+			LUA->PushCFunction(CONSOLE_GetParent);
+			LUA->SetField(-2, "GetParent");
 
 			LUA->PushCFunction(CONSOLE_SetVisible);
 			LUA->SetField(-2, "SetVisible");
