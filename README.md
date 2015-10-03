@@ -11,6 +11,6 @@ This will allow you to interact with the console in Lua, with a new module, cons
 4. require("console") from menu state to test
 
 ## Credit
-MetaMan (danielga) - VTable dump of CGameConsoleDialog; much C++ help
-Meep - C++ help
-Willox - C++ help
+- MetaMan (danielga) - VTable dump of CGameConsoleDialog; much C++ help
+- Meep - C++ help
+- Willox - C++ help
