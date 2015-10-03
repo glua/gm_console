@@ -50,7 +50,7 @@ int console_IsConsoleVisible(lua_State *state) {
 int console_Get(lua_State *state) {
 	Lua::UserData *ud = (Lua::UserData *)LUA->NewUserdata(sizeof(Lua::UserData));
 	ud->data = g_GameConsoleDialog;
-	ud->type = Lua::Type::PANEL; // 420
+	ud->type = 420; // Lua::Type::PANEL
 
 	LUA->CreateMetaTableType("Console", 420);
 	LUA->SetMetaTable(-2);
@@ -101,6 +101,32 @@ int CONSOLE_IsVisible(lua_State *state) {
 	return 1;
 }
 
+int CONSOLE_IsOpaque(lua_State *state) {
+	LUA->PushBool(g_GameConsoleDialog->IsOpaque());
+
+	return 1;
+}
+
+int CONSOLE_SetTitle(lua_State *state) {
+	LUA->CheckType(2, Lua::Type::STRING);
+
+	g_GameConsoleDialog->SetTitle(LUA->GetString(2), true);
+
+	return 0;
+}
+
+int CONSOLE_GetName(lua_State *state) {
+	LUA->PushString(g_GameConsoleDialog->GetName());
+
+	return 1;
+}
+
+int CONSOLE_GetClassName(lua_State *state) {
+	LUA->PushString(g_GameConsoleDialog->GetClassName());
+
+	return 1;
+}
+
 GMOD_MODULE_OPEN() {
 	CreateInterfaceFn GameUIFactory = Sys_GetFactory(GAMEUI_LIB);
 	g_GameConsole = (IGameConsole*)GameUIFactory(GAMECONSOLE_INTERFACE_VERSION, NULL);
@@ -137,14 +163,8 @@ GMOD_MODULE_OPEN() {
 
 	LUA->CreateMetaTableType("Console", 420);
 		LUA->CreateTable();
-			LUA->PushString("Console");
-			LUA->SetField(-2, "__type");
-
-			LUA->PushCFunction(CONSOLE_tostring);
-			LUA->SetField(-2, "__tostring");
-
-			LUA->PushCFunction(CONSOLE_SetParent);
-			LUA->SetField(-2, "SetParent");
+			// LUA->PushCFunction(CONSOLE_SetParent); Broken (Meep says it has to do with things being across .dlls)
+			// LUA->SetField(-2, "SetParent");
 
 			LUA->PushCFunction(CONSOLE_GetParent);
 			LUA->SetField(-2, "GetParent");
@@ -154,7 +174,25 @@ GMOD_MODULE_OPEN() {
 
 			LUA->PushCFunction(CONSOLE_IsVisible);
 			LUA->SetField(-2, "IsVisible");
+
+			LUA->PushCFunction(CONSOLE_IsOpaque);
+			LUA->SetField(-2, "IsOpaque");
+
+			LUA->PushCFunction(CONSOLE_SetTitle);
+			LUA->SetField(-2, "SetTitle");
+
+			LUA->PushCFunction(CONSOLE_GetName);
+			LUA->SetField(-2, "GetName");
+
+			LUA->PushCFunction(CONSOLE_GetClassName);
+			LUA->SetField(-2, "GetClassName");
 		LUA->SetField(-2, "__index");
+
+		LUA->PushString("Console");
+		LUA->SetField(-2, "__type");
+
+		LUA->PushCFunction(CONSOLE_tostring);
+		LUA->SetField(-2, "__tostring");
 	LUA->Pop();
 
 	return 0;

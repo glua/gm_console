@@ -54,7 +54,7 @@ public:													//  Index Offset
 	virtual void SetParent(vgui::Panel *newParent) = 0;								// 0040  00A0
 	virtual void SetParent(vgui::VPANEL newParent) = 0;								// 0041  00A4
 	virtual bool HasParent(vgui::VPANEL potentialParent) = 0;								// 0042  00A8 (Zerf: arg was unsigned int)
-	virtual void GetChildren() = 0;								// 0043  00AC (Zerf: ????)
+	virtual CUtlVector<VPANEL> &GetChildren() = 0;								// 0043  00AC (Zerf: ????)
 	virtual void SetAutoDelete(bool state) = 0;								// 0044  00B0
 	virtual void AddActionSignalTarget(vgui::Panel *messageTarget) = 0;								// 0045  00B4
 	virtual void AddActionSignalTarget(vgui::VPANEL messageTarget) = 0;								// 0046  00B8
