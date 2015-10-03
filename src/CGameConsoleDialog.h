@@ -19,14 +19,14 @@ public:													//  Index Offset
 	virtual vgui::VPANEL IsWithinTraverse(int x, int y, bool traversePopups) = 0;								// 0005  0014
 	virtual void GetInset(int &left, int &top, int &right, int &bottom) = 0;								// 0006  0018
 	virtual void GetClipRect(int &x0, int &y0, int &x1, int &y1) = 0;								// 0007  001C
-	virtual void OnChildAdded(vgui::VPANEL child) = 0;								// 0008  0020 (Zerf: arg was unsigned int)
+	virtual void OnChildAdded(vgui::VPANEL child) = 0;								// 0008  0020
 	virtual void OnSizeChanged(int wide, int tall) = 0;								// 0009  0024
 	virtual void InternalFocusChanged(bool lost) = 0;								// 0010  0028
 	virtual bool RequestInfo(KeyValues *data) = 0;								// 0011  002C
 	virtual void RequestFocus(int direction = 0) = 0;								// 0012  0030
 	virtual bool RequestFocusPrev(vgui::VPANEL panel) = 0;								// 0013  0034
 	virtual bool RequestFocusNext(vgui::VPANEL panel) = 0;								// 0014  0038
-	virtual void OnMessage(const KeyValues *params, vgui::VPANEL fromPanel) = 0;								// 0015  003C (Zerf: arg2 was unsigned int)
+	virtual void OnMessage(const KeyValues *params, vgui::VPANEL fromPanel) = 0;								// 0015  003C
 	virtual vgui::VPANEL GetCurrentKeyFocus() = 0;								// 0016  0040
 	virtual int GetTabPosition() = 0;								// 0017  0044
 	virtual const char *GetName() = 0;								// 0018  0048
@@ -54,7 +54,7 @@ public:													//  Index Offset
 	virtual void SetParent(vgui::Panel *newParent) = 0;								// 0040  00A0
 	virtual void SetParent(vgui::VPANEL newParent) = 0;								// 0041  00A4
 	virtual bool HasParent(vgui::VPANEL potentialParent) = 0;								// 0042  00A8 (Zerf: arg was unsigned int)
-	virtual CUtlVector<VPANEL> &GetChildren() = 0;								// 0043  00AC (Zerf: ????)
+	virtual CUtlVector<VPANEL> &GetChildren() = 0;								// 0043  00AC
 	virtual void SetAutoDelete(bool state) = 0;								// 0044  00B0
 	virtual void AddActionSignalTarget(vgui::Panel *messageTarget) = 0;								// 0045  00B4
 	virtual void AddActionSignalTarget(vgui::VPANEL messageTarget) = 0;								// 0046  00B8

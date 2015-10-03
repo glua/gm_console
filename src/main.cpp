@@ -127,6 +127,20 @@ int CONSOLE_GetClassName(lua_State *state) {
 	return 1;
 }
 
+int CONSOLE_GetDescription(lua_State *state) {
+	LUA->PushString(g_GameConsoleDialog->GetDescription());
+
+	return 1;
+}
+
+int CONSOLE_SetTitleBarVisible(lua_State *state) {
+	LUA->CheckType(2, Lua::Type::BOOL);
+
+	g_GameConsoleDialog->SetTitleBarVisible(LUA->GetBool(2));
+
+	return 0;
+}
+
 GMOD_MODULE_OPEN() {
 	CreateInterfaceFn GameUIFactory = Sys_GetFactory(GAMEUI_LIB);
 	g_GameConsole = (IGameConsole*)GameUIFactory(GAMECONSOLE_INTERFACE_VERSION, NULL);
@@ -186,6 +200,12 @@ GMOD_MODULE_OPEN() {
 
 			LUA->PushCFunction(CONSOLE_GetClassName);
 			LUA->SetField(-2, "GetClassName");
+
+			LUA->PushCFunction(CONSOLE_GetDescription);
+			LUA->SetField(-2, "GetDescription");
+
+			LUA->PushCFunction(CONSOLE_SetTitleBarVisible);
+			LUA->SetField(-2, "SetTitleBarVisible");
 		LUA->SetField(-2, "__index");
 
 		LUA->PushString("Console");
