@@ -64,6 +64,7 @@ int CONSOLE_tostring(lua_State *state) {
 	return 1;
 }
 
+/*
 int CONSOLE_SetParent(lua_State *state) {
 	LUA->CheckType(2, Lua::Type::PANEL);
 
@@ -73,6 +74,7 @@ int CONSOLE_SetParent(lua_State *state) {
 
 	return 0;
 }
+*/
 
 int CONSOLE_GetParent(lua_State *state) {
 	vgui::Panel *pPanel = g_GameConsoleDialog->GetParent();
@@ -177,7 +179,7 @@ GMOD_MODULE_OPEN() {
 
 	LUA->CreateMetaTableType("Console", 420);
 		LUA->CreateTable();
-			// LUA->PushCFunction(CONSOLE_SetParent); Broken (Meep says it has to do with things being across .dlls)
+			// LUA->PushCFunction(CONSOLE_SetParent);
 			// LUA->SetField(-2, "SetParent");
 
 			LUA->PushCFunction(CONSOLE_GetParent);
